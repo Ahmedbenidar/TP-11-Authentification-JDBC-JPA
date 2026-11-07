@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Espace membre • Portail USMBA</title>
+    <link rel="stylesheet" th:href="@{/css/portail.css}">
+</head>
+<body>
+<header class="barre">
+    <div class="marque"><span class="pastille">U</span><span>Portail USMBA</span></div>
+    <nav>
+        <a th:href="@{/espace/accueil}">Accueil</a>
+        <a th:href="@{/espace/profil}">Mon profil</a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/administration/tableau-de-bord}">Administration</a>
+        <form th:action="@{/deconnexion}" method="post" style="display:inline;">
+            <button type="submit" class="bouton discret">Déconnexion</button>
+        </form>
+    </nav>
+</header>
+
+<main class="contenu">
+    <div class="identite">
+        <div class="initiales" th:text="${initiales}">AB</div>
+        <div>
+            <strong th:text="${principal.nomComplet}">Ahmed Benidar</strong>
+            <small th:text="'Connecté en tant que ' + ${principal.username}">Connecté en tant que a.benidar</small>
+        </div>
+    </div>
+
+    <div class="carte" style="margin-bottom:1.5rem;">
+        <h1>Bienvenue dans ton espace</h1>
+        <p class="sous-titre">Cette page est protégée par Spring Security et n'est accessible qu'à un compte authentifié possédant le rôle requis.</p>
+
+        <div class="grille">
+            <div class="tuile">
+                <div class="etiquette">Identifiant</div>
+                <div class="valeur" th:text="${principal.username}">a.benidar</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Adresse e-mail</div>
+                <div class="valeur" style="font-size:0.95rem;font-weight:600;" th:text="${principal.email}">ahmed.benidar@usmba.ac.ma</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Dernière connexion</div>
+                <div class="valeur" style="font-size:1.05rem;" th:text="${derniereConnexion}">07 novembre 2026</div>
+            </div>
+        </div>
+
+        <div class="etiquette">Rôles chargés depuis la base</div>
+        <ul class="etiquettes">
+            <li th:each="role : ${roles}"
+                th:text="${role}"
+                th:classappend="${role == 'ROLE_ADMIN'} ? 'admin' : ''">ROLE_ADMIN</li>
+        </ul>
+    </div>
+
+    <div class="carte">
+        <h1 style="font-size:1.15rem;">Ce que prouve cette page</h1>
+        <ul style="color:var(--texte-doux); font-size:0.92rem; line-height:1.7; margin:0.6rem 0 0; padding-left:1.2rem;">
+            <li>Le compte a été retrouvé en base MySQL, pas en mémoire.</li>
+            <li>Le mot de passe a été comparé à son empreinte BCrypt par <code>DaoAuthenticationProvider</code>.</li>
+            <li>Les autorités <code>ROLE_*</code> proviennent de la table <code>roles</code> via la relation <code>comptes_roles</code>.</li>
+            <li>La date de connexion est enregistrée au moment du login par un <code>AuthenticationSuccessHandler</code>.</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="pied">Portail USMBA — TP 11, authentification JDBC / JPA</footer>
+</body>
+</html>

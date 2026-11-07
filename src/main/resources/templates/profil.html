@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon profil • Portail USMBA</title>
+    <link rel="stylesheet" th:href="@{/css/portail.css}">
+</head>
+<body>
+<header class="barre">
+    <div class="marque"><span class="pastille">U</span><span>Portail USMBA</span></div>
+    <nav>
+        <a th:href="@{/espace/accueil}">Accueil</a>
+        <a th:href="@{/espace/profil}">Mon profil</a>
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/administration/tableau-de-bord}">Administration</a>
+        <form th:action="@{/deconnexion}" method="post" style="display:inline;">
+            <button type="submit" class="bouton discret">Déconnexion</button>
+        </form>
+    </nav>
+</header>
+
+<main class="contenu">
+    <div class="identite">
+        <div class="initiales" th:text="${initiales}">AB</div>
+        <div>
+            <strong th:text="${principal.nomComplet}">Ahmed Benidar</strong>
+            <small>Fiche issue de la table <code>comptes</code></small>
+        </div>
+    </div>
+
+    <div class="carte">
+        <h1>Mon profil</h1>
+        <p class="sous-titre">Toutes les informations affichées ici sont lues dans l'objet <code>ComptePrincipal</code>, construit à partir de la ligne correspondante en base.</p>
+
+        <div class="grille">
+            <div class="tuile">
+                <div class="etiquette">Nom complet</div>
+                <div class="valeur" style="font-size:1rem;" th:text="${principal.nomComplet}">Ahmed Benidar</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Identifiant</div>
+                <div class="valeur" th:text="${principal.username}">a.benidar</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">E-mail</div>
+                <div class="valeur" style="font-size:0.95rem;font-weight:600;" th:text="${principal.email}">ahmed.benidar@usmba.ac.ma</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Identifiant technique</div>
+                <div class="valeur" th:text="'#' + ${principal.id}">#1</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Compte actif</div>
+                <div class="valeur" style="font-size:1rem;"
+                     th:text="${principal.enabled} ? 'Oui' : 'Non'">Oui</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Dernière connexion</div>
+                <div class="valeur" style="font-size:0.95rem;" th:text="${dateNaissanceCompte}">07 novembre 2026</div>
+            </div>
+        </div>
+
+        <div class="etiquette" style="margin-top:1.2rem;">Rôles associés</div>
+        <ul class="etiquettes">
+            <li th:each="role : ${roles}" th:text="${role}"
+                th:classappend="${role == 'ROLE_ADMIN'} ? 'admin' : ''">ROLE_MEMBRE</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="pied">Portail USMBA — TP 11, authentification JDBC / JPA</footer>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration • Portail USMBA</title>
+    <link rel="stylesheet" th:href="@{/css/portail.css}">
+</head>
+<body>
+<header class="barre">
+    <div class="marque"><span class="pastille">U</span><span>Portail USMBA</span></div>
+    <nav>
+        <a th:href="@{/espace/accueil}">Accueil</a>
+        <a th:href="@{/espace/profil}">Mon profil</a>
+        <a th:href="@{/administration/tableau-de-bord}">Administration</a>
+        <form th:action="@{/deconnexion}" method="post" style="display:inline;">
+            <button type="submit" class="bouton discret">Déconnexion</button>
+        </form>
+    </nav>
+</header>
+
+<main class="contenu">
+    <div class="identite">
+        <div class="initiales" th:text="${initiales}">AB</div>
+        <div>
+            <strong th:text="${principal.nomComplet}">Ahmed Benidar</strong>
+            <small>Espace réservé au rôle <code>ROLE_ADMIN</code></small>
+        </div>
+    </div>
+
+    <div class="carte" style="margin-bottom:1.5rem;">
+        <h1>Tableau de bord d'administration</h1>
+        <p class="sous-titre">Cette page n'est servie que si l'utilisateur connecté possède l'autorité <code>ROLE_ADMIN</code>. Un membre simple reçoit une erreur 403.</p>
+
+        <div class="grille">
+            <div class="tuile accent">
+                <div class="etiquette">Comptes enregistrés</div>
+                <div class="valeur" th:text="${nombreTotal}">4</div>
+            </div>
+            <div class="tuile accent">
+                <div class="etiquette">Comptes actifs</div>
+                <div class="valeur" th:text="${nombreActifs}">4</div>
+            </div>
+            <div class="tuile">
+                <div class="etiquette">Rôle requis</div>
+                <div class="valeur" style="font-size:1.05rem;">ROLE_ADMIN</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="carte">
+        <h2 style="font-size:1.15rem;margin:0 0 1rem;">Comptes du portail</h2>
+        <div style="overflow-x:auto;">
+            <table class="table-comptes">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Identifiant</th>
+                    <th>Nom complet</th>
+                    <th>E-mail</th>
+                    <th>Rôles</th>
+                    <th>État</th>
+                    <th>Dernière connexion</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${comptes}">
+                    <td th:text="${c.id}">1</td>
+                    <td><code th:text="${c.identifiant}">a.benidar</code></td>
+                    <td th:text="${c.nomComplet}">Ahmed Benidar</td>
+                    <td th:text="${c.email}">ahmed.benidar@usmba.ac.ma</td>
+                    <td>
+                        <span class="role-pastille" th:each="r : ${c.roles}"
+                              th:text="${r.code}"
+                              th:classappend="${r.code == 'ROLE_ADMIN'} ? 'admin' : ''">ROLE_MEMBRE</span>
+                    </td>
+                    <td>
+                        <span class="pastille-etat" th:classappend="${c.actif} ? 'actif' : 'inactif'"
+                              th:text="${c.actif} ? 'Actif' : 'Inactif'">Actif</span>
+                    </td>
+                    <td th:text="${c.derniereConnexionAffichee}">07/11/2026 10:15</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer class="pied">Portail USMBA — TP 11, authentification JDBC / JPA</footer>
+</body>
+</html>

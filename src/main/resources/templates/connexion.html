@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion • Portail USMBA</title>
+    <link rel="stylesheet" th:href="@{/css/portail.css}">
+</head>
+<body>
+<div class="page-connexion">
+    <div class="carte carte-connexion">
+        <div class="marque" style="margin-bottom:1.2rem;">
+            <span class="pastille">U</span>
+            <span>Portail USMBA</span>
+        </div>
+        <h1>Connexion</h1>
+        <p class="sous-titre">Authentification vérifiée en base MySQL, mots de passe chiffrés avec BCrypt.</p>
+
+        <div class="message erreur" th:if="${erreurIdentifiants}">
+            Identifiant ou mot de passe incorrect. Vérifie la casse et réessaie.
+        </div>
+        <div class="message succes" th:if="${deconnexionEffectuee}">
+            Tu as été déconnecté. La session a bien été invalidée.
+        </div>
+
+        <form th:action="@{/connexion}" method="post">
+            <div class="champ">
+                <label for="identifiant">Identifiant</label>
+                <input type="text" id="identifiant" name="identifiant" autocomplete="username" autofocus required>
+            </div>
+            <div class="champ">
+                <label for="motDePasse">Mot de passe</label>
+                <input type="password" id="motDePasse" name="motDePasse" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="bouton">Se connecter</button>
+        </form>
+
+        <div class="comptes-demo">
+            <strong style="color:var(--texte);">Comptes de démonstration</strong><br>
+            <code>a.benidar</code> / <code>Portail@2026</code> — administrateur<br>
+            <code>s.elidrissi</code> / <code>Membre@2026</code> — membre<br>
+            <code>y.ouazzani</code> / <code>Membre@2026</code> — membre + observateur<br>
+            <code>h.alaoui</code> / <code>Lecteur@2026</code> — observateur (accès refusé aux espaces)
+        </div>
+    </div>
+</div>
+</body>
+</html>

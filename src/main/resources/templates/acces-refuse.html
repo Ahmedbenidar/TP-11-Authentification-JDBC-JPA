@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accès refusé • Portail USMBA</title>
+    <link rel="stylesheet" th:href="@{/css/portail.css}">
+</head>
+<body>
+<div class="page-connexion">
+    <div class="carte carte-connexion">
+        <div class="marque" style="margin-bottom:1.2rem;">
+            <span class="pastille">U</span>
+            <span>Portail USMBA</span>
+        </div>
+        <h1>Accès refusé</h1>
+        <p class="sous-titre">
+            Ton compte est bien authentifié
+            <span th:if="${principal != null}" th:text="' (' + ${principal.username} + ')'">(h.alaoui)</span>,
+            mais il ne possède pas le rôle exigé par cette page.
+        </p>
+
+        <div class="message erreur">
+            Erreur 403 : les autorités chargées depuis la base ne couvrent pas les règles
+            <code>hasRole(...)</code> / <code>hasAnyRole(...)</code> de l'URL demandée.
+        </div>
+
+        <div th:if="${principal != null}" style="margin-bottom:1rem;">
+            <div class="etiquette">Rôles de ce compte</div>
+            <ul class="etiquettes">
+                <li th:each="role : ${principal.codesRoles}" th:text="${role}">ROLE_OBSERVATEUR</li>
+            </ul>
+        </div>
+
+        <a th:href="@{/connexion}" class="bouton" style="display:block;text-align:center;text-decoration:none;">
+            Revenir à la page de connexion
+        </a>
+        <form th:action="@{/deconnexion}" method="post" style="margin-top:0.7rem;">
+            <button type="submit" class="bouton discret" style="width:100%;">Se déconnecter</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
